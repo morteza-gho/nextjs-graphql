@@ -6,8 +6,13 @@ export default function Home() {
 
       <h1>Hello, Next.js 13 App Directory!</h1>
       <p className="my-4">
-        <Link href="/client-side">
-          Use Apollo Client inside Client Side Component
+        <Link href="/client-side/users">
+          Use Apollo Client inside Client Side Component - users
+        </Link>
+      </p>
+      <p className="my-4">
+        <Link href="/client-side/users2">
+          Use Apollo Client inside Client Side Component - users 2
         </Link>
       </p>
       <p>

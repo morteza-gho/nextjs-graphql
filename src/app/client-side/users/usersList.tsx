@@ -2,6 +2,7 @@
 
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import Link from "next/link";
 import React from "react";
 
 const query = gql`
@@ -18,7 +19,7 @@ interface Response {
   users: { id: number; name: string; email: string }[];
 }
 
-export default function UsersList() {
+export default function UsersList2() {
   const [count, setCount] = React.useState(0);
   const { data, error } = useSuspenseQuery<Response>(query);
 
@@ -34,6 +35,13 @@ export default function UsersList() {
           decrement
         </button>
         <button onClick={() => setCount(0)}>reset</button>
+
+        <p className="mt-4 text-blue-600">
+          <Link href="/client-side/users2">
+            Users List 2
+          </Link>
+        </p>
+
       </div>
 
       {error ? (
