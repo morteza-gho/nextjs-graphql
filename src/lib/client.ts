@@ -6,7 +6,6 @@ const GRAPHQL_ENDPOINT =
 
 export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
-    // @ts-expect-error
     cache: new InMemoryCache(),
     link: new HttpLink({
       uri: GRAPHQL_ENDPOINT,

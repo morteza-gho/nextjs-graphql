@@ -2,7 +2,6 @@
 
 import { gql } from "@apollo/client";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import Link from "next/link";
 import React from "react";
 
 const query = gql`
@@ -20,29 +19,14 @@ interface Response {
 }
 
 export default function UsersList2() {
+  
   const [count, setCount] = React.useState(0);
   const { data, error } = useSuspenseQuery<Response>(query);
 
   return (
-    <section className="max-w-7xl mx-auto my-12">
-      <div style={{ marginBottom: "4rem", textAlign: "center" }}>
-        <h4 style={{ marginBottom: 16 }}>{count}</h4>
-        <button onClick={() => setCount((prev) => prev + 1)}>increment</button>
-        <button
-          onClick={() => setCount((prev) => prev - 1)}
-          style={{ marginInline: 16 }}
-        >
-          decrement
-        </button>
-        <button onClick={() => setCount(0)}>reset</button>
+    <section className="max-w-7xl mx-auto my-8">
 
-        <p className="mt-4 text-blue-600">
-          <Link href="/client-side/users2">
-            Users List 2
-          </Link>
-        </p>
-
-      </div>
+      <h3 className="text-3xl font-bold text-center mb-8">Users list 2</h3>
 
       {error ? (
         <p>Oh no, there was an error</p>
