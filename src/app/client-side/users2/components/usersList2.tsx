@@ -21,6 +21,7 @@ interface Response {
 export default function UsersList2() {
 
   const [count, setCount] = React.useState(0);
+  // useSuspenseQuery to send request in server side - generate DOM and then render component
   const { data, error } = useSuspenseQuery<Response>(query);
 
   return (

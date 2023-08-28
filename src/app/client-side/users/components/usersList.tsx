@@ -1,7 +1,6 @@
 "use client";
 
-import { gql } from "@apollo/client";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { gql, useQuery } from "@apollo/client";
 import React from "react";
 
 const query = gql`
@@ -21,12 +20,15 @@ interface Response {
 export default function UsersList2() {
   
   const [count, setCount] = React.useState(0);
-  const { data, error } = useSuspenseQuery<Response>(query);
+  // useQuery to send request normaly - render component and then get data
+  const {data, error} = useQuery<Response>(query, {
+    // pollInterval: 1000
+  });
 
   return (
     <section className="max-w-7xl mx-auto my-8">
 
-      <h3 className="text-3xl font-bold text-center mb-8">Users list 2</h3>
+      <h3 className="text-3xl font-bold text-center mb-8">Users list 1</h3>
 
       {error ? (
         <p>Oh no, there was an error</p>
