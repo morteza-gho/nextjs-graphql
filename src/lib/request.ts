@@ -1,0 +1,49 @@
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+// import { getAuthStorage, setAuthStorage } from '@containers/auth';
+
+const axiosInstance: AxiosInstance = axios.create({
+  timeout: 150000,
+  baseURL: process.env['NEXT_PUBLIC_API_URL'],
+});
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+      ...(config?.headers || {}),
+    };
+
+    /* const { accessToken = undefined } = getAuthStorage();
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    } */
+
+    headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJlbWFpbCI6InNjaG9vbEBtYWlsaW5hdG9yLmNvbSIsInVzZXJJZCI6NCwicm9sZXMiOlt7ImlkIjo1LCJ0aXRsZSI6IlNDSE9PTCIsImRlZmF1bHQiOnRydWUsIlBlcm1pc3Npb25TdGF0dXMiOiJGVUxMIiwiYWRtaW5QYXJ0IjpmYWxzZSwic2Nob29sSWQiOm51bGwsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjBUMTQ6MzY6NDguMTcwWiIsInVzZXJSb2xlUGVybWlzc2lvbnMiOlt7ImlkIjo4LCJyb2xlSWQiOjUsInBlcm1pc3Npb25JZCI6MTUsImhhc1Blcm1pc3Npb24iOnRydWUsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjJUMDY6Mjk6NTYuMDMwWiIsInBlcm1pc3Npb24iOnsiaWQiOjE1LCJ0aXRsZSI6IkhvbWUiLCJQZXJtaXNzaW9uUGFydCI6IlNDSE9PTF9PUEVSQVRJT04iLCJzZXF1ZW5jZSI6MSwidXBkYXRlZEF0IjoiMjAyMy0wMi0yM1QwNjoyMDoyOS43MTZaIn19LHsiaWQiOjksInJvbGVJZCI6NSwicGVybWlzc2lvbklkIjoxNiwiaGFzUGVybWlzc2lvbiI6dHJ1ZSwidXBkYXRlZEF0IjoiMjAyMy0wMi0yMlQwNjoyOTo1Ni4wMzBaIiwicGVybWlzc2lvbiI6eyJpZCI6MTYsInRpdGxlIjoiUGFyZW50cyIsIlBlcm1pc3Npb25QYXJ0IjoiU0NIT09MX09QRVJBVElPTiIsInNlcXVlbmNlIjoxMSwidXBkYXRlZEF0IjoiMjAyMy0wMi0yM1QwNjoyMDoyOS43MzBaIn19LHsiaWQiOjEwLCJyb2xlSWQiOjUsInBlcm1pc3Npb25JZCI6MTcsImhhc1Blcm1pc3Npb24iOnRydWUsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjJUMDY6Mjk6NTYuMDMwWiIsInBlcm1pc3Npb24iOnsiaWQiOjE3LCJ0aXRsZSI6IlB1cGlscyIsIlBlcm1pc3Npb25QYXJ0IjoiU0NIT09MX09QRVJBVElPTiIsInNlcXVlbmNlIjo0LCJ1cGRhdGVkQXQiOiIyMDIzLTAyLTIzVDA2OjIwOjI5Ljc0NloifX0seyJpZCI6MTIsInJvbGVJZCI6NSwicGVybWlzc2lvbklkIjoxOCwiaGFzUGVybWlzc2lvbiI6dHJ1ZSwidXBkYXRlZEF0IjoiMjAyMy0wMi0yMlQwNjoyOTo1Ni4wMzBaIiwicGVybWlzc2lvbiI6eyJpZCI6MTgsInRpdGxlIjoiVHV0b3JzIiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjUsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjNUMDY6MjA6MjkuNzQ2WiJ9fSx7ImlkIjoxMywicm9sZUlkIjo1LCJwZXJtaXNzaW9uSWQiOjE5LCJoYXNQZXJtaXNzaW9uIjp0cnVlLCJ1cGRhdGVkQXQiOiIyMDIzLTAyLTIyVDA2OjI5OjU2LjAzMFoiLCJwZXJtaXNzaW9uIjp7ImlkIjoxOSwidGl0bGUiOiJMZXNzb25zIiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjYsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjNUMDY6MjA6MjkuNzYzWiJ9fSx7ImlkIjoxNCwicm9sZUlkIjo1LCJwZXJtaXNzaW9uSWQiOjIwLCJoYXNQZXJtaXNzaW9uIjp0cnVlLCJ1cGRhdGVkQXQiOiIyMDIzLTAyLTIyVDA2OjI5OjU2LjAzMFoiLCJwZXJtaXNzaW9uIjp7ImlkIjoyMCwidGl0bGUiOiJUZWFjaGVycyIsIlBlcm1pc3Npb25QYXJ0IjoiU0NIT09MX09QRVJBVElPTiIsInNlcXVlbmNlIjo3LCJ1cGRhdGVkQXQiOiIyMDIzLTAyLTIzVDA2OjIwOjI5Ljc2M1oifX0seyJpZCI6MTE1LCJyb2xlSWQiOjUsInBlcm1pc3Npb25JZCI6MjEsImhhc1Blcm1pc3Npb24iOnRydWUsInVwZGF0ZWRBdCI6IjIwMjMtMDctMjBUMTU6NDA6MzUuMzkzWiIsInBlcm1pc3Npb24iOnsiaWQiOjIxLCJ0aXRsZSI6IlN0YWZmIiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjgsInVwZGF0ZWRBdCI6IjIwMjMtMDItMjNUMDY6MjA6MjkuNzYzWiJ9fSx7ImlkIjoxMTYsInJvbGVJZCI6NSwicGVybWlzc2lvbklkIjoyMiwiaGFzUGVybWlzc2lvbiI6dHJ1ZSwidXBkYXRlZEF0IjoiMjAyMy0wNy0yMFQxNTo0MDo0NC41MjNaIiwicGVybWlzc2lvbiI6eyJpZCI6MjIsInRpdGxlIjoiV2FsbGV0IiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjIsInVwZGF0ZWRBdCI6IjIwMjMtMDQtMjBUMDk6MTA6MjcuMTgwWiJ9fSx7ImlkIjoxMTcsInJvbGVJZCI6NSwicGVybWlzc2lvbklkIjoyMywiaGFzUGVybWlzc2lvbiI6dHJ1ZSwidXBkYXRlZEF0IjoiMjAyMy0wNy0yMFQxNTo0MDo1MC44MzBaIiwicGVybWlzc2lvbiI6eyJpZCI6MjMsInRpdGxlIjoiU3RhdGlzdGljIiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjEwLCJ1cGRhdGVkQXQiOiIyMDIzLTA0LTIwVDA5OjExOjMwLjMxM1oifX0seyJpZCI6MTE4LCJyb2xlSWQiOjUsInBlcm1pc3Npb25JZCI6MjQsImhhc1Blcm1pc3Npb24iOnRydWUsInVwZGF0ZWRBdCI6IjIwMjMtMDctMjBUMTU6NDA6NTYuNDgwWiIsInBlcm1pc3Npb24iOnsiaWQiOjI0LCJ0aXRsZSI6IlJvbGVzIiwiUGVybWlzc2lvblBhcnQiOiJTQ0hPT0xfT1BFUkFUSU9OIiwic2VxdWVuY2UiOjksInVwZGF0ZWRBdCI6IjIwMjMtMDQtMjBUMDk6MTE6NDguMzQzWiJ9fSx7ImlkIjoxMTksInJvbGVJZCI6NSwicGVybWlzc2lvbklkIjoyNSwiaGFzUGVybWlzc2lvbiI6dHJ1ZSwidXBkYXRlZEF0IjoiMjAyMy0wNy0yMFQxNTo0MTowMi41MTBaIiwicGVybWlzc2lvbiI6eyJpZCI6MjUsInRpdGxlIjoiQ29ob3J0cyIsIlBlcm1pc3Npb25QYXJ0IjoiU0NIT09MX09QRVJBVElPTiIsInNlcXVlbmNlIjozLCJ1cGRhdGVkQXQiOiIyMDIzLTA0LTIwVDA5OjEyOjI1Ljc3M1oifX1dfV0sImRldmljZUlkIjoiZmE1M2JjNWM3OGYxMzY2NDczZWYyOWNiNjk4NTNjMmIiLCJkZXZpY2VUeXBlIjoiV2luZG93cyIsImFwcFZlcnNpb24iOiIyIiwiaWF0IjoxNjkzMzc2NzQ2LCJleHAiOjE2OTkzNzY3NDZ9.6I8tyi4JbXeOJk_eB13I73uxZ27whmPgmjeXS3LbBCk';
+
+    return Object.assign(config, { headers });
+  },
+  (error) => Promise.reject(error),
+);
+axiosInstance.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if ([401].includes(error?.response?.status)) {
+      // setAuthStorage(null);
+      window.location.replace(`/account/login`);
+    }
+
+    const { error_description, message } = error?.response?.data || {};
+    console.log(error?.response?.data);
+    let errorText =
+      error_description || message || (!error?.response ? 'Can not connect to server.' : 'An unknown error occurred.');
+
+    return Promise.reject(errorText);
+  },
+);
+
+const request = (config: AxiosRequestConfig) => axiosInstance.request(config);
+
+export default request;

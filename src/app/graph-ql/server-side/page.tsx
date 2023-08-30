@@ -1,4 +1,4 @@
-import { getClient } from "@/lib/client";
+import { getClient } from "@/lib/apollo-client";
 import { gql } from "@apollo/client";
 import React from "react";
 
