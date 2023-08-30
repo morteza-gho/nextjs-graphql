@@ -6,6 +6,7 @@ export default function UsersLayout({ children }: {
   return (
     <>
       <div className="flex justify-center p-8 gap-4">
+        <Link href='/' className="py-2 px-4 border border-blue-400 rounded-md inline-block">Home</Link>
         <Link href='/graph-ql/client-side/users' className="py-2 px-4 border border-blue-400 rounded-md inline-block">Users List 1</Link>
         <Link href='/graph-ql/client-side/users2' className="py-2 px-4 border border-blue-400 rounded-md inline-block">Users List 2</Link>
       </div>
